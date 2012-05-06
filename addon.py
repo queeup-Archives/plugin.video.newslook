@@ -27,10 +27,6 @@ class Main:
   def __init__(self):
     # create playlist for play all
     self.plist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
-    # clean playlist
-    self.plist.clear()
-    if DEBUG:
-      self.log('cleaning playlist before adding new content')
     if ("action=list" in sys.argv[2]):
       self.list_contents(self.arguments('url'))
     elif ("action=playall" in sys.argv[2]):
@@ -62,6 +58,10 @@ class Main:
   def list_contents(self, url):
     if DEBUG:
       self.log('list_contents()')
+    if DEBUG:
+      self.log('cleaning playlist before adding new content')
+    # clean playlist
+    self.plist.clear()
     # Play all at once directory item
     listitem = xbmcgui.ListItem('▶ Play All', iconImage='NowPlayingIcon.png')
     parameters = '%s?action=playall' % (sys.argv[0])
