@@ -63,7 +63,7 @@ class Main:
     # clean playlist
     self.plist.clear()
     # Play all at once directory item
-    listitem = xbmcgui.ListItem('▶ Play All', iconImage='NowPlayingIcon.png')
+    listitem = xbmcgui.ListItem(__language__(30210), iconImage='NowPlayingIcon.png')
     parameters = '%s?action=playall' % (sys.argv[0])
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), parameters, listitem, True)
     json = simplejson.loads(urllib.urlopen(url).read())
