@@ -44,7 +44,9 @@ class Main:
             {'title':__language__(30206), 'url':URL % 'technology'},
             {'title':__language__(30207), 'url':URL % 'health-medicine'},
             {'title':__language__(30208), 'url':URL % 'artsculture'},
-            {'title':__language__(30209), 'url':URL % 'lifestyle'}]
+            {'title':__language__(30209), 'url':URL % 'celebrity'},
+            {'title':__language__(30210), 'url':URL % 'seriously'},
+            {'title':__language__(30211), 'url':URL % 'lifestyle'}]
     for title in menu:
       listitem = xbmcgui.ListItem(title['title'], iconImage='DefaultFolder.png', thumbnailImage=__icon__)
       url = '%s?action=list&url=%s' % (sys.argv[0], urllib.quote_plus(title['url']))
@@ -62,7 +64,7 @@ class Main:
     # clean playlist
     self.plist.clear()
     # Play all at once directory item
-    listitem = xbmcgui.ListItem(__language__(30210), iconImage='NowPlayingIcon.png')
+    listitem = xbmcgui.ListItem(__language__(30212), iconImage='NowPlayingIcon.png')
     parameters = '%s?action=playall' % (sys.argv[0])
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), parameters, listitem, True)
     json = simplejson.loads(urllib.urlopen(url).read())
