@@ -51,7 +51,7 @@ class Main:
     # End of directory...
     xbmcplugin.endOfDirectory(int(sys.argv[1]), True)
 
-  def list_contents(self, url):
+  def list_contents(self, category_url):
     if DEBUG:
       self.log('list_contents()')
     if DEBUG:
@@ -62,7 +62,7 @@ class Main:
     listitem = xbmcgui.ListItem(__language__(30212), iconImage='NowPlayingIcon.png')
     url = sys.argv[0] + '?' + urllib.urlencode({'action': 'playall'})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, True)
-    json = simplejson.loads(urllib.urlopen(url).read())
+    json = simplejson.loads(urllib.urlopen(category_url).read())
     for entry in json['videos']:
       _id = entry['id']
       title = entry['title']
