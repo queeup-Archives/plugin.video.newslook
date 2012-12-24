@@ -3,6 +3,7 @@
 # Imports
 import sys
 import urllib
+import urlparse
 import simplejson
 import time
 import xbmc
@@ -27,7 +28,7 @@ class Main:
     # create playlist for play all
     self.plist = xbmc.PlayList(xbmc.PLAYLIST_VIDEO)
     if ("action=list" in sys.argv[2]):
-      self.list_contents(self.arguments('url'))
+      self.list_contents(self.parameters('url'))
     elif ("action=playall" in sys.argv[2]):
       self.play_all()
     else:
@@ -49,7 +50,8 @@ class Main:
             {'title':__language__(30211), 'url':URL % 'lifestyle'}]
     for title in menu:
       listitem = xbmcgui.ListItem(title['title'], iconImage='DefaultFolder.png', thumbnailImage=__icon__)
-      url = '%s?action=list&url=%s' % (sys.argv[0], urllib.quote_plus(title['url']))
+      url = sys.argv[0] + '?' + urllib.urlencode({'action': 'list',
+                                                  'url': title['url']})
       xbmcplugin.addDirectoryItems(int(sys.argv[1]), [(url, listitem, True)])
     # Sort methods and content type...
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
@@ -65,8 +67,8 @@ class Main:
     self.plist.clear()
     # Play all at once directory item
     listitem = xbmcgui.ListItem(__language__(30212), iconImage='NowPlayingIcon.png')
-    parameters = '%s?action=playall' % (sys.argv[0])
-    xbmcplugin.addDirectoryItem(int(sys.argv[1]), parameters, listitem, True)
+    url = sys.argv[0] + '?' + urllib.urlencode({'action': 'playall'})
+    xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, True)
     json = simplejson.loads(urllib.urlopen(url).read())
     for entry in json['videos']:
       _id = entry['id']
@@ -105,12 +107,9 @@ class Main:
     xbmcPlayer = xbmc.Player()
     xbmcPlayer.play(self.plist)
 
-  def arguments(self, arg, unquote=True):
-    _arguments = dict(part.split('=') for part in sys.argv[2][1:].split('&'))
-    if unquote:
-      return urllib.unquote_plus(_arguments[arg])
-    else:
-      return _arguments[arg]
+  def parameters(self, arg):
+    _parameters = urlparse.parse_qs(urlparse.urlparse(sys.argv[2]).query)
+    return _parameters[arg][0]
 
   def log(self, description):
     xbmc.log("[ADD-ON] '%s v%s': DEBUG: %s" % (__plugin__, __version__, description), xbmc.LOGNOTICE)
