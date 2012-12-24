@@ -21,6 +21,7 @@ __icon__ = __addon__.getAddonInfo('icon')
 __language__ = __addon__.getLocalizedString
 
 URL = 'http://iptv.newslook.com/api/v2/categories/%s.json'
+CATEGORIES = 'http://iptv.newslook.com/api/v2/categories.json'
 
 
 class Main:
@@ -37,21 +38,13 @@ class Main:
   def main_menu(self):
     if DEBUG:
       self.log('main_menu()')
-    menu = [{'title':__language__(30201), 'url':URL % 'top-news'},
-            {'title':__language__(30202), 'url':URL % 'world'},
-            {'title':__language__(30203), 'url':URL % 'u-s-news'},
-            {'title':__language__(30204), 'url':URL % 'finance'},
-            {'title':__language__(30205), 'url':URL % 'science'},
-            {'title':__language__(30206), 'url':URL % 'technology'},
-            {'title':__language__(30207), 'url':URL % 'health-medicine'},
-            {'title':__language__(30208), 'url':URL % 'artsculture'},
-            {'title':__language__(30209), 'url':URL % 'celebrity'},
-            {'title':__language__(30210), 'url':URL % 'seriously'},
-            {'title':__language__(30211), 'url':URL % 'lifestyle'}]
-    for title in menu:
-      listitem = xbmcgui.ListItem(title['title'], iconImage='DefaultFolder.png', thumbnailImage=__icon__)
+    categories_json = simplejson.loads(urllib.urlopen(CATEGORIES).read())
+    for categories in categories_json['categories']:
+      name = categories['name']
+      permalink = categories['permalink']
+      listitem = xbmcgui.ListItem(name, iconImage='DefaultFolder.png', thumbnailImage=__icon__)
       url = sys.argv[0] + '?' + urllib.urlencode({'action': 'list',
-                                                  'url': title['url']})
+                                                  'url': URL % permalink})
       xbmcplugin.addDirectoryItems(int(sys.argv[1]), [(url, listitem, True)])
     # Sort methods and content type...
     xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
