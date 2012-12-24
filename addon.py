@@ -5,7 +5,7 @@ import sys
 import urllib
 import urlparse
 import simplejson
-import time
+#import time
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -74,11 +74,11 @@ class Main:
       _id = entry['id']
       title = entry['title']
       description = entry['description']
-      _duration = entry['duration']
-      if _duration >= 3600 * 1000:
-          duration = time.strftime('%H:%M:%S', time.gmtime(_duration / 1000))
-      else:
-        duration = time.strftime('%M:%S', time.gmtime(_duration / 1000))
+      #_duration = entry['duration']
+      #if _duration >= 3600 * 1000:
+      #    duration = time.strftime('%H:%M:%S', time.gmtime(_duration / 1000))
+      #else:
+      #  duration = time.strftime('%M:%S', time.gmtime(_duration / 1000))
       video = entry['cdn_asset_url']
       #channel = entry['channel_name']
       thumbnail_version = entry['thumbnail_version']
@@ -90,14 +90,15 @@ class Main:
       listitem.setInfo(type='video',
                        infoLabels={'title': title,
                                    'plot': description,
-                                   'duration': duration})
+                                   #'duration': duration,
+                                   })
       xbmcplugin.addDirectoryItems(int(sys.argv[1]), [(video, listitem, False)])
       # add all contents to playlist for playall
       self.plist.add(video, listitem)
     # Content Type
     xbmcplugin.setContent(int(sys.argv[1]), 'movies')
     # Sort methods
-    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE, label2Mask='%D')
+    xbmcplugin.addSortMethod(int(sys.argv[1]), xbmcplugin.SORT_METHOD_NONE)
     # End of directory...
     xbmcplugin.endOfDirectory(int(sys.argv[1]), True)
 
