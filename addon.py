@@ -18,7 +18,6 @@ __addon__ = xbmcaddon.Addon()
 __plugin__ = __addon__.getAddonInfo('name')
 __version__ = __addon__.getAddonInfo('version')
 __icon__ = __addon__.getAddonInfo('icon')
-__language__ = __addon__.getLocalizedString
 
 URL = 'http://iptv.newslook.com/api/v2/categories/%s.json'
 CATEGORIES = 'http://iptv.newslook.com/api/v2/categories.json'
@@ -59,7 +58,7 @@ class Main:
     # clean playlist
     self.plist.clear()
     # Play all at once directory item
-    listitem = xbmcgui.ListItem(__language__(30212), iconImage='NowPlayingIcon.png')
+    listitem = xbmcgui.ListItem('▶ Play All', iconImage='NowPlayingIcon.png')
     url = sys.argv[0] + '?' + urllib.urlencode({'action': 'playall'})
     xbmcplugin.addDirectoryItem(int(sys.argv[1]), url, listitem, True)
     json = simplejson.loads(urllib.urlopen(category_url).read())
